@@ -76,7 +76,7 @@ public class ApplicationRunner {
 
         long finishTime2 = System.currentTimeMillis();
         //Количество времени работы потоков:
-        System.out.println("Working time : " + (finishTime2 - startTime2));
+        System.out.println("Времени заняло : " + (finishTime2 - startTime2) + "\n");
 
         //Вывод всех аккаунтов для наглядности и суммы денег на всех счетах:
         int result = 0;
@@ -84,6 +84,6 @@ public class ApplicationRunner {
             System.out.println(account);
             result += account.getMoney();
         }
-        System.out.println("Сумма денег на всех аккаунтах = " + result);
+        System.out.println("\nСумма денег на всех аккаунтах = " + result);
     }
 }
