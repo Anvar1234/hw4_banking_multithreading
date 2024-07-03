@@ -1,14 +1,24 @@
 package model;
 
+import util.BankingLogger;
+
+import java.util.Random;
 import java.util.UUID;
+import java.util.logging.Logger;
 
 public class Account {
-    //где-то создать аккаунтКреатер, чтобы парсить и сразу создавать аккаунты.
+    private static int countAcconts = 0;
+    private final int simpleID;
     private UUID UUID;
     private String readableID;
-    private long money; //формат должен быть типа BigDecimal что ли, для работы с точными и большими числами.
+    private int money;
+    private static final Logger logger = BankingLogger.log(Account.class.getName());
+    private final Random random = new Random();
+    private final Object LOCK1 = new Object();
+    private final Object LOCK2 = new Object();
 
     public Account(java.util.UUID UUID, String readableID) {
+        this.simpleID = ++countAcconts;
         this.UUID = UUID;
         this.readableID = readableID;
         this.money = 10000;
@@ -30,18 +40,34 @@ public class Account {
         this.readableID = readableID;
     }
 
-    public long getMoney() {
+    public int getMoney() {
         return money;
     }
 
-    public void setMoney(long money) { //не должно быть возможности устанавливать отрицательное значение.
+    public void setMoney(int money) { //не должно быть возможности устанавливать отрицательное значение.
         this.money = money;
     }
 
+    public void deposit(int depositAmount) {
+        logger.fine(String.format("Начисление на счет " + readableID + " " + depositAmount + " денег"));
+//        synchronized (LOCK1) {
+        money += depositAmount;
+//        }
+    }
+
+    public void withdraw(int withdrawAmount) {
+//        synchronized (LOCK2) {
+        logger.fine(String.format("Попытка списания со счета " + readableID + " " + withdrawAmount + " денег"));
+        if (withdrawAmount > money) {
+            throw new NotEnoughMoneyException(String.format("Недостаточный баланс на счете %s!", readableID));
+        }
+        money -= withdrawAmount;
+//        }
+    }
+
+
     @Override
     public String toString() {
-        return  "UUID=" + UUID +
-                ", readableID=" + readableID +
-                ", money=" + money;
+        return "SimpleID=" + simpleID + ", UUID=" + UUID + ", readableID=" + readableID + ", money=" + money;
     }
 }

@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class AccountCreator {
     private final String fileName;
@@ -20,11 +21,9 @@ public class AccountCreator {
     }
 
     private List<Account> createAccounts() {
-        List<Account> accounts = new ArrayList<>();
-        for (String readableId : getReadableIds()) {
-            accounts.add(new Account(UUID.randomUUID(), readableId));
-        }
-        return accounts;
+        return getReadableIds().stream()
+                .map(readableId -> new Account(UUID.randomUUID(), readableId))
+                .collect(Collectors.toList());
     }
 
     private List<String> getReadableIds() {
