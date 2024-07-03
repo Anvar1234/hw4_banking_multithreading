@@ -4,6 +4,7 @@ import util.BankingLogger;
 
 import java.util.Random;
 import java.util.UUID;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Account {
@@ -49,7 +50,9 @@ public class Account {
     }
 
     public void deposit(int depositAmount) {
-        logger.fine(String.format("Начисление на счет " + readableID + " " + depositAmount + " денег"));
+        if (logger.isLoggable(Level.FINE)) {
+            logger.fine(String.format("Зачисление на счет " + readableID + " " + depositAmount + " денег\n"));
+        }
 //        synchronized (LOCK1) {
         money += depositAmount;
 //        }
@@ -57,9 +60,11 @@ public class Account {
 
     public void withdraw(int withdrawAmount) {
 //        synchronized (LOCK2) {
-        logger.fine(String.format("Попытка списания со счета " + readableID + " " + withdrawAmount + " денег"));
+        if (logger.isLoggable(Level.FINE)) {
+            logger.fine(String.format("Попытка списания со счета " + readableID + " " + withdrawAmount + " денег\n"));
+        }
         if (withdrawAmount > money) {
-            throw new NotEnoughMoneyException(String.format("Недостаточный баланс на счете %s!", readableID));
+            throw new NotEnoughMoneyException(String.format("Недостаточный баланс на счете %s!%n", readableID));
         }
         money -= withdrawAmount;
 //        }

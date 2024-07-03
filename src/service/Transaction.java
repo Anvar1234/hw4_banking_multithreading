@@ -6,6 +6,7 @@ import util.BankingLogger;
 
 import java.util.Random;
 import java.util.concurrent.CountDownLatch;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Transaction implements Runnable {
@@ -29,7 +30,7 @@ public class Transaction implements Runnable {
         logger.info(String.format("Баланс счета списания " + withdrawingAccount.getReadableID()
                 + "=" + withdrawingAccount.getMoney() + "\n"
                 + "Баланс счета пополнения " + depositingAccount.getReadableID()
-                + "=" + depositingAccount.getMoney() + "\n" + "Сумма списания : " + amount));
+                + "=" + depositingAccount.getMoney() + "\n" + "Сумма списания : " + amount + "\n" + "Поток : %s%n", Thread.currentThread().getName()));
         try {
             withdrawingAccount.withdraw(amount);
             depositingAccount.deposit(amount);
@@ -42,10 +43,11 @@ public class Transaction implements Runnable {
     public void run() {
         try {
             doTransaction();
-            logger.info(String.format("Списание со счета " + withdrawingAccount.getReadableID()
-                    + " на счет " + depositingAccount.getReadableID()
-                    + " завершено в потоке %s%n", Thread.currentThread().getName()));
-
+            if(logger.isLoggable(Level.FINE)) {
+                logger.fine(String.format("Списание со счета " + withdrawingAccount.getReadableID()
+                        + " на счет " + depositingAccount.getReadableID()
+                        + " завершено в потоке %s%n", Thread.currentThread().getName()));
+            }
         } catch (NotEnoughMoneyException e) {
             logger.warning("метод run: " + e.getMessage());
         } finally {
