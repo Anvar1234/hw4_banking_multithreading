@@ -15,7 +15,6 @@ public class Transaction implements Runnable {
     private final Account withdrawingAccount;
     private final Account depositingAccount;
     private final Random random = new Random();
-    private int amount;
     private static final Logger logger = BankingLogger.log(Transaction.class.getName());
 
 
@@ -26,11 +25,13 @@ public class Transaction implements Runnable {
     }
 
     private synchronized void doTransaction() {
-        amount = random.nextInt(10000);
+        int amount = random.nextInt(10000);
         logger.info(String.format("Баланс счета списания " + withdrawingAccount.getReadableID()
                 + "=" + withdrawingAccount.getMoney() + "\n"
                 + "Баланс счета пополнения " + depositingAccount.getReadableID()
-                + "=" + depositingAccount.getMoney() + "\n" + "Сумма списания : " + amount + "\n" + "Поток : %s%n", Thread.currentThread().getName()));
+                + "=" + depositingAccount.getMoney() + "\n"
+                + "Сумма списания : " + amount + "\n"
+                + "Поток : %s%n", Thread.currentThread().getName()));
         try {
             withdrawingAccount.withdraw(amount);
             depositingAccount.deposit(amount);

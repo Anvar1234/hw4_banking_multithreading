@@ -51,7 +51,9 @@ public class Account {
 
     public void deposit(int depositAmount) {
         if (logger.isLoggable(Level.FINE)) {
-            logger.fine(String.format("Зачисление на счет " + readableID + " " + depositAmount + " денег\n"));
+            logger.fine(String.format("Зачисление на счет : " + readableID
+                    + ", суммы : " + depositAmount
+                    + ", остаток на счете : %s%n", money));
         }
 //        synchronized (LOCK1) {
         money += depositAmount;
@@ -61,7 +63,9 @@ public class Account {
     public void withdraw(int withdrawAmount) {
 //        synchronized (LOCK2) {
         if (logger.isLoggable(Level.FINE)) {
-            logger.fine(String.format("Попытка списания со счета " + readableID + " " + withdrawAmount + " денег\n"));
+            logger.fine(String.format("Попытка списания со счета : " + readableID
+                    + ", суммы : " + withdrawAmount
+                    + ", остаток на счете : %s%n", money));
         }
         if (withdrawAmount > money) {
             throw new NotEnoughMoneyException(String.format("Недостаточный баланс на счете %s!%n", readableID));
