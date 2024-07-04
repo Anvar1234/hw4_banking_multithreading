@@ -2,9 +2,10 @@ package creator;
 
 import model.Account;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -41,11 +42,11 @@ public class AccountCreator {
     }
 
     private String lineParser(String line) {
-        String[] strings = line.split(";"); //убирать последнюю ";" не нужно, так как метод split в Java по умолчанию удаляет пустые строки в конце.
-        System.out.println(Arrays.toString(strings));
+        String[] strings = line.split(";");
+        String lastString = strings[strings.length - 1];
         return strings[1]
                 .concat(strings[0])
-                .concat(strings[strings.length - 1].substring(8));
+                .concat(lastString.substring(lastString.length() - 2));
     }
 
 }
